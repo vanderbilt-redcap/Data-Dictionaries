@@ -1,0 +1,27 @@
+{
+    "name": "DataDictionaryModule",
+    "description": "Custom Data Dictionary",
+    "namespace": "VUMC\\DataDictionaryModule",
+    "framework-version": 3,
+    "authors": [
+        {
+            "name": "Ryan Antcliff",
+            "email": "ryan.antcliff@vumc.org",
+            "institution": "University of Vanderbilt"
+        }
+    ],
+    "links":{
+        "project": [
+            {
+                "name": "Data Dictionary",
+                "icon": "fas fa-globe",
+                "url": "pages/Data.php"
+            }
+        ]
+    },
+     "no-auth-pages": [
+      "test"
+   ]
+ 
+   
+}
