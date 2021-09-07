@@ -529,13 +529,13 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
 
 
 
-    function compareDataDictionaries()
+    function compareDataDictionaries($path)
     {
 
         global $lang;
 
         $old = \REDCap::getDataDictionary(PROJECT_ID, 'array', false);
-        $new = $this->dataDictionaryCSVToMetadataArray($this->framework->getModulePath() . "csv/NEWITEMS.csv");
+        $new = $this->dataDictionaryCSVToMetadataArray($path);
         $table = "";
 
         $removed = array_diff_key($old, $new);
