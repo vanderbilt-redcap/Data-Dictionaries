@@ -265,7 +265,7 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
                 foreach ($choices as $val => $label) {
                     $col .= '<tr valign="top">';
                     $oldValue = $oldChoices[$val];
-                    if($new[$first_field] == 'checkbox'){
+                    if($first_field == 'checkbox'){
                         $col .= '<td>' . $val . '</td>';
                         $col .= '<td>' . $new[$first_field] . '</td>';
                     }elseif($label !== $oldValue){
