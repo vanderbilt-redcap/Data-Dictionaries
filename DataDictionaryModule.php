@@ -244,7 +244,6 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
             $col .= "<div class='d-inline-block mr-1 mb-2'>" . $old[$fifth_field] . "</div>";
         }
 
-
         if($new[$sixth_field] !== $old[$sixth_field]){
             if($new[$first_field] == 'calc'){
                 $col .= '<table>';
@@ -287,37 +286,34 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
 
                 }
                 $col .= '</table>';
-        }
-
-    }elseif($old[$sixth_field] != ""){
-        if($old[$first_field] == 'calc'){
-                $col .= '<table>';
-                $col .= '<tr>';
-                $col .= '<th> Calculation </th>';
-                $col .= '</tr>';
-                $col .= '<tr>';
-                $col .= "<td>" . $old[$sixth_field] . "</td>";
-                $col .= '</tr>';
-                $col .= '</table>';
-        }elseif($old[$first_field] == 'sql'){
-                $col .= '<table border="0" cellpadding="2" cellspacing="0" class="ReportTableWithBorder"><tr><td>' . $old[$sixth_field] . '</td></tr></table>';
-        }else{
+            }
+        }elseif($old[$sixth_field] != ""){
+            if($old[$first_field] == 'calc'){
+                    $col .= '<table>';
+                    $col .= '<tr>';
+                    $col .= '<th> Calculation </th>';
+                    $col .= '</tr>';
+                    $col .= '<tr>';
+                    $col .= "<td>" . $old[$sixth_field] . "</td>";
+                    $col .= '</tr>';
+                    $col .= '</table>';
+            }elseif($old[$first_field] == 'sql'){
+                    $col .= '<table border="0" cellpadding="2" cellspacing="0" class="ReportTableWithBorder"><tr><td>' . $old[$sixth_field] . '</td></tr></table>';
+            }else{
                 $col .= '<table border="0" cellpadding="2" cellspacing="0" class="ReportTableWithBorder">';
                 foreach ($oldChoices as $val => $label) {
                     $col .= '<tr valign="top">';
-                    if ($old[$first_field] == 'checkbox') {
+                    if ($old[$first_field] == 'checkbox' && $old[$sixth_field] != $new[$sixth_field]) {
                         $col .= '<td>' . $val . '</td>';
-                        $col .= '<td>' . $old[$first_field] . '</td>';
-                    }
-                     else {
+                        $col .= '<td>patata'.$label . $old[$first_field] . '</td>';
+                    } else {
                         $col .= "<td>" . $val . "</td>";
                         $col .= "<td>" . $label . "</td>";
                     }
                 }
                 $col .= '</table>';
+            }
         }
-            
-    }
         return $col;
     }
 
@@ -403,8 +399,6 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
                     $col .= '<tr valign="top">';
                     if ($value['field_type'] == 'checkbox') {
                         $col .= '<td>' . $val . '</td>';
-
-                        $col .= '<td>' . $value['field_type'] . '</td>';
                     } else {
                         $col .= '<td>' . $val . '</td>';
                     }
