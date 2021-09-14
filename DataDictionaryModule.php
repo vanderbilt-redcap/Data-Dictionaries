@@ -432,8 +432,6 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
 
         $sumOfAll = 0;
         foreach($new as $formNames => $field_names){
-            
-            
             $table .= "<tr><td colspan='5' style='background-color:#333; color:#fff;'>Instrument: " . ucwords(str_replace('_', ' ', $formNames)) . "</td></tr>";
             foreach($field_names as $type => $metaRows){
                 foreach($metaRows as $key => $value){
@@ -534,13 +532,12 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
 
         $removed = array_diff_key($old, $new);
         $added = array_diff_key($new, $old);
-        
 
         $possiblyChanged = array_intersect_key($new, $old);
 
         foreach ($possiblyChanged as $key => $value) {
-            if ($old[$key] != $value) {
-                $changed[$key] = $value;
+            if (trim($old[$key]) != trim($value)) {
+                $changed[$key] = trim($value);
             }
         }
 
