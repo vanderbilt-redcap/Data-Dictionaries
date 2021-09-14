@@ -536,8 +536,19 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
         $possiblyChanged = array_intersect_key($new, $old);
 
         foreach ($possiblyChanged as $key => $value) {
-            if (trim($old[$key]) != trim($value)) {
-                $changed[$key] = trim($value);
+            if ($old[$key] != $value) {
+//                $changed[$key] = $value;
+
+                $hasValueChanged = false;
+                foreach ($value as $fieldType => $dataValue) {
+                    if (trim($dataValue) != trim($old[$key][$fieldType])) {
+                        $hasValueChanged = true;
+                    }
+                }
+                if($hasValueChanged){
+                    $changed[$key] = $value;
+                }
+
             }
         }
 
