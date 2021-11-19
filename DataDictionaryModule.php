@@ -537,8 +537,6 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
 
         foreach ($possiblyChanged as $key => $value) {
             if ($old[$key] != $value) {
-//                $changed[$key] = $value;
-
                 $hasValueChanged = false;
                 foreach ($value as $fieldType => $dataValue) {
                     if (trim($dataValue) != trim($old[$key][$fieldType])) {

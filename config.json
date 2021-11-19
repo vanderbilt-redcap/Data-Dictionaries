@@ -1,6 +1,6 @@
 {
-    "name": "DataDictionaryModule",
-    "description": "Custom Data Dictionary",
+    "name": "Data Dictionary Compare",
+    "description": "This tool allows users to compare two REDCap data dictionaries, the data dictionary of the current project and a second CSV data dictionary uploaded by the user.",
     "namespace": "VUMC\\DataDictionaryModule",
     "framework-version": 3,
     "authors": [
