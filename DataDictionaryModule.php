@@ -58,15 +58,9 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
         $select_choices = $choices;
         $select_array = explode("|", $select_choices);
         foreach ($select_array as $key => $val) {
-            $position = strpos($val, ",");
-
-            $StaticNumber = trim(substr($val, 0, $position));
-
-            $text = trim(substr($val, $position + 1));
-            $array_to_fill[] = $text;
+            $new_choices = explode(",",$val);
+            $array_to_fill[trim($new_choices[0])] = trim($new_choices[1]);
         }
-        //Change keys to start at 1
-        $array_to_fill = array_combine(range(1, count($array_to_fill)), $array_to_fill);
 
         return $array_to_fill;
     }
@@ -126,7 +120,6 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
 
         $choices = $this->parseArray($new[$sixth_field]);
         $oldChoices = $this->parseArray($old[$sixth_field]);
-
         if ($new[$first_field] == 'select') $new[$first_field] = 'dropdown';
         elseif ($new[$first_field] == 'textarea') $new[$first_field] = 'notes';
 
@@ -264,6 +257,7 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
                 foreach ($choices as $val => $label) {
                     $col .= '<tr valign="top">';
                     $oldValue = $oldChoices[$val];
+
                     if($first_field == 'checkbox'){
                         $col .= '<td>' . $val . '</td>';
                         $col .= '<td>' . $new[$first_field] . '</td>';
@@ -551,7 +545,6 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
         }
 
         $allItems = $this->custom_array_merge($changed, $added, $removed);
-        
 
 ?>
 
