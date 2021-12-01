@@ -71,7 +71,6 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
         $color = "";
         $col = "";
 
-
         if ($value[$field_name] !== $old_value[$field_name]) {
             $color = "class='mb-2 bg-warning';";
 
@@ -89,7 +88,6 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
     {
         $color = "";
         $col = "";
-
         if ($value[$field_name] !== $old_value[$field_name]) {
             if ($old_value[$field_name] == "") {
                 $color = "class='mb-2 text-light p-1' style='background-color:#5d9451; font-size:12px;';";
@@ -435,9 +433,8 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
                     $old_value = $old[$key];
                     $choices = $this->parseArray($value['select_choices_or_calculations']);
                     $oldChoices = $this->parseArray($old_value['select_choices_or_calculations']);
-                    $value = array_map('strip_tags', $value);
+//                    $value = array_map('strip_tags', $value);
 
-                    
                     if ($type === 'changed') {
                         $first_col .= $this->main($value, $old_value, 'field_name');
                         $first_col .= $this->secondary($value, $old_value, 'branching_logic', 'Show the field ONLY if:');
