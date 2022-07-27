@@ -249,7 +249,10 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
                 $col .= '</tr>';
                 $col .= '</table>';
             } elseif ($new[$first_field] == 'sql') {
-                $col .= '<table border="0" cellpadding="2" cellspacing="0" class="ReportTableWithBorder"><tr><td>' . $new[$sixth_field] . '</td></tr></table>';
+                $col .= '<table border="0" cellpadding="2" cellspacing="0" class="ReportTableWithBorder">'.
+                        '<tr><td style="background-color:#ffc107;">' . $new[$sixth_field] . '</td></tr>'.
+                        '<tr><td style="text-decoration: line-through;">' . $old[$sixth_field] . '</td></tr>'.
+                    '</table>';
             } else {
                 $col .= '<table border="0" cellpadding="2" cellspacing="0" class="ReportTableWithBorder">';
                 foreach ($choices as $val => $label) {
@@ -421,7 +424,6 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
 
     function ColorTable($new, $old){
         $table = "";
-
         $sumOfAll = 0;
         foreach($new as $formNames => $field_names){
             $table .= "<tr><td colspan='5' style='background-color:#333; color:#fff;'>Instrument: " . ucwords(str_replace('_', ' ', $formNames)) . "</td></tr>";
@@ -530,12 +532,8 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
 
     function compareDataDictionaries($path)
     {
-
-        global $lang;
-
         $old = \REDCap::getDataDictionary(PROJECT_ID, 'array', false);
         $new = $this->dataDictionaryCSVToMetadataArray($path);
-        $table = "";
 
         $removed = array_diff_key($old, $new);
         $added = array_diff_key($new, $old);
@@ -556,9 +554,7 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
 
             }
         }
-
         $allItems = $this->custom_array_merge($changed, $added, $removed);
-
 ?>
 
 
