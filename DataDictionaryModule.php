@@ -493,20 +493,36 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
 
     function countedItems($added, $changed, $removed){
         $text = "";
-        $added = count($added);
-        $removed = count($removed);
-        $changed = count($changed);
+        $anyItems = true;
+        if(isset($added))
+            $added = count($added);
+        else
+            $added = 0;
+        if(isset($removed))
+            $removed = count($removed);
+        else
+            $removed = 0;
+        if(isset($changed))
+            $changed = count($changed);
+        else
+            $changed = 0;
 
-        $text .= "<ul class='numberOfRows'>";
-        $text .= "<li><span class='mr-1'>Rows added: $added </span></li>";
-        $text .= "<li><span class='mr-1'>Rows changed: $changed </span></li>";
-        $text .= "<li><span>Rows removed: $removed </span></li>";
+        if($changed == 0 && $removed == 0 && $added == 0){
+            $text = '<div class="alert alert-info">No data dictionary changes detected.</div>';
+            $anyItems = false;
+        }else {
+            $text .= "<ul class='numberOfRows'>";
+            $text .= "<li><span class='mr-1'>Rows added: $added </span></li>";
+            $text .= "<li><span class='mr-1'>Rows changed: $changed </span></li>";
+            $text .= "<li><span>Rows removed: $removed </span></li>";
+        }
 
         $text .= "</ul>";
         
 
         print $text;
 
+        return $anyItems;
     }
  
 
@@ -549,26 +565,30 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
         <div class="container-fluid mt-5">
             <div class="row">
                 <div class="col-md-12">
-                    <?php $this->countedItems($added, $changed, $removed); ?>
-                    <ul class="legend">
-                        <li><span class="changed"></span> Changed</li>
-                        <li><span class="new"></span> New</li>
-                        <li><span class="removed"></span> Removed</li>
-                        <li><span class="old"></span> Old Value</li>
-                    </ul>
-                    <div class="table-wrapper-scroll-y custom-scrollbar table-responsive">
-                        <table class='table table-bordered table-striped'>
-                            <thead>
-                                <th>Variable / Field Name</th>
-                                <th>Field Label <br /> <small><i><b>Field Note</b></i></small></th>
-                                <th>Field Attributes (Field Type, Validation, Choices, Calculations, etc.)</th>
-                            </thead>
+                    <?php
+                    $anyItems = $this->countedItems($added, $changed, $removed);
+                    if($anyItems){
+                    ?>
+                        <ul class="legend">
+                            <li><span class="changed"></span> Changed</li>
+                            <li><span class="new"></span> New</li>
+                            <li><span class="removed"></span> Removed</li>
+                            <li><span class="old"></span> Old Value</li>
+                        </ul>
+                        <div class="table-wrapper-scroll-y custom-scrollbar table-responsive">
+                            <table class='table table-bordered table-striped'>
+                                <thead>
+                                    <th>Variable / Field Name</th>
+                                    <th>Field Label <br /> <small><i><b>Field Note</b></i></small></th>
+                                    <th>Field Attributes (Field Type, Validation, Choices, Calculations, etc.)</th>
+                                </thead>
 
-                            <?php
-                            $this->ColorTable($allItems, $old);
-                            ?>
-                        </table>
-                    </div>
+                                <?php
+                                $this->ColorTable($allItems, $old);
+                                ?>
+                            </table>
+                        </div>
+                    <?php } ?>
                 </div>
             </div>
         </div>
