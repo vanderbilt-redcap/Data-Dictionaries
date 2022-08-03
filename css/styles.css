@@ -1,5 +1,3 @@
-
-
 .project-tab {
     padding: 10%;
     margin-top: -8%;
@@ -59,19 +57,20 @@ display: block;
   }
 
 /* basic positioning */
-.legend { list-style: none; }
+.legend { list-style: none;padding-bottom: 10px;padding-left: 0;}
 .legend li { float: left; margin-right: 10px; }
-.legend span { border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; }
+.legend span { float: left; margin: 2px; }
 /* your colors */
-.legend .changed { background-color: #ffc107; }
-.legend .new { background-color: #5d9451; }
-.legend .removed { background-color: #cb410b; }
-.legend .old { background-color: #6c757d;}
+.changed{background-color:#ffc107;}
+.added{background-color:#5d9451;}
+.removed{background-color:#cb410b;}
+.old {background-color: #6c757d;}
 
 .numberOfRows{
     display: flex;
     flex-direction: column;
     list-style: none;
+    padding-left: 0;
 }
 
 .numberOfRows li > span{
@@ -147,4 +146,19 @@ body.loading .modal {
    modal element will be visible */
 body.loading .modal {
     display: block;
+}
+.label {
+    display: inline;
+    padding: 0.2em 0.6em 0.3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25em;
+}
+a:hover{
+    outline: none !important;
 }

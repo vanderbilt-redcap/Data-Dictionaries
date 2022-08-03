@@ -114,7 +114,6 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
     {
         $col = "";
         $color = "";
-        global $lang;
 
         $choices = $this->parseArray($new[$sixth_field]);
         $oldChoices = $this->parseArray($old[$sixth_field]);
@@ -411,10 +410,19 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
    }
 
 
-    function tableColumns($first, $second, $third)
+    function tableColumns($status, $first, $second, $third)
     {
-        $table = "";
+        $icon = "fa-pencil-alt";
+        if($status == "changed"){
+            $icon = "fa-pencil-alt";
+        }else if($status == "added"){
+            $icon = "fa-plus";
+        }else if($status == "removed"){
+            $icon = "fa-minus";
+        }
 
+        $table = "";
+        $table .= '<td style="background-color: #fff;"><a href="#" data-toggle="tooltip" title="'.$status.'" data-placement="top" class="custom-tooltip" style="vertical-align: -2px;"><span class="label '.$status.'" title="'.$status.'"><i class="fas '.$icon.'" aria-hidden="true"></i></span></a></td>';
         $table .= "<td>" . $first . "</td>";
         $table .= "<td>" . $second . "</td>";
         $table .= "<td>" . $third . "</td>";
@@ -435,7 +443,6 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
                     $old_value = $old[$key];
                     $choices = $this->parseArray($value['select_choices_or_calculations']);
                     $oldChoices = $this->parseArray($old_value['select_choices_or_calculations']);
-//                    $value = array_map('strip_tags', $value);
 
                     if ($type === 'changed') {
                         $first_col .= $this->main($value, $old_value, 'field_name');
@@ -444,7 +451,7 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
                         $second_col .= $this->main($value, $old_value, 'field_label');
                         $second_col .= $this->secondary($value, $old_value, 'field_note');
                         $third_col .= $this->thirdCol($value, $old_value, 'field_type', 'text_validation_type_or_show_slider_number', 'required_field', 'identifier', 'field_annotation', 'select_choices_or_calculations', 'text_validation_min', 'text_validation_max');
-                        $table .= $this->tableColumns($first_col, $second_col, $third_col);
+                        $table .= $this->tableColumns("changed", $first_col, $second_col, $third_col);
                     }
 
                     if($type === 'added'){
@@ -452,14 +459,14 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
                          $first_col .= $this->first_col($value);
                          $second_col .= $this->second_col($value);
                          $third_col .= $this->third_col($value);
-                         $table .= $this->tableColumns($first_col, $second_col, $third_col);
+                         $table .= $this->tableColumns("added", $first_col, $second_col, $third_col);
                     }
                     if($type === 'removed'){
                         $table .= "<tr style='background-color:#cb410b; color:#fff;'>";
                         $first_col .= $this->first_col($value);
                         $second_col .= $this->second_col($value);
                         $third_col .= $this->third_col($value);
-                        $table .= $this->tableColumns($first_col, $second_col, $third_col);
+                        $table .= $this->tableColumns("removed", $first_col, $second_col, $third_col);
 
                     }
 
@@ -557,7 +564,11 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
         $allItems = $this->custom_array_merge($changed, $added, $removed);
 ?>
 
-
+        <script>
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip();
+            })
+        </script>
         <div class="container-fluid mt-5">
             <div class="row">
                 <div class="col-md-12">
@@ -566,14 +577,15 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
                     if($anyItems){
                     ?>
                         <ul class="legend">
-                            <li><span class="changed"></span> Changed</li>
-                            <li><span class="new"></span> New</li>
-                            <li><span class="removed"></span> Removed</li>
-                            <li><span class="old"></span> Old Value</li>
+                            <li><a href="#" data-toggle="tooltip" title="changed" data-placement="top" class="custom-tooltip" style="vertical-align: -2px;"><span class="label changed" title="changed"><i class="fas fa-pencil-alt" aria-hidden="true"></i></span></a> Changed</li>
+                            <li><a href="#" data-toggle="tooltip" title="added" data-placement="top" class="custom-tooltip" style="vertical-align: -2px;"><span class="label added" title="added"><i class="fas fa-plus" aria-hidden="true"></i></span></a> Added</li>
+                            <li><a href="#" data-toggle="tooltip" title="removed" data-placement="top" class="custom-tooltip" style="vertical-align: -2px;"><span class="label removed" title="removed"><i class="fas fa-minus" aria-hidden="true"></i></span></a> Removed</li>
+                            <li><a href="#" data-toggle="tooltip" title="old" data-placement="top" class="custom-tooltip" style="vertical-align: -2px;"><span class="label old" title="old"><i class="fas fa-times" aria-hidden="true"></i></span></a> Old Value</li>
                         </ul>
                         <div class="table-wrapper-scroll-y custom-scrollbar table-responsive">
                             <table class='table table-bordered table-striped'>
                                 <thead>
+                                    <th>Status</th>
                                     <th>Variable / Field Name</th>
                                     <th>Field Label <br /> <small><i><b>Field Note</b></i></small></th>
                                     <th>Field Attributes (Field Type, Validation, Choices, Calculations, etc.)</th>
