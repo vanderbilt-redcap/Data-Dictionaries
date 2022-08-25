@@ -93,7 +93,7 @@ th {
     text-align: inherit;
     text-align: -webkit-match-parent;
 }
-.legendPDF { list-style: none;padding-left: 0;}
+.legendPDF { list-style: none;padding-bottom: 10px;padding-left: 0;}
 .legendPDF li { float: left;}
 .legendPDF .label{ float: left; margin: 2px; }
 .table-striped tbody tr:nth-of-type(odd) {
