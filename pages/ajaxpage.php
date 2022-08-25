@@ -5,6 +5,7 @@ $mimes = array('text/x-comma-separated-values', 'text/comma-separated-values', '
 $message = "";
     if (in_array($_FILES['file']['type'], $mimes)) {
         $module->compareDataDictionaries($_FILES['file']['tmp_name']);
+        $module->setProjectSetting('filename',$_FILES['file']['name']);
     } else {
         die("Sorry file type not allowed");
     }

@@ -57,7 +57,7 @@ display: block;
   }
 
 /* basic positioning */
-.legend { list-style: none;padding-bottom: 10px;padding-left: 0;}
+.legend { list-style: none;padding-left: 0;}
 .legend li { float: left; margin-right: 10px; }
 .legend span { float: left; margin: 2px; }
 /* your colors */

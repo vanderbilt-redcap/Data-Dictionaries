@@ -179,7 +179,7 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
                 }
                 $col .= ") </div>";
             }
-           
+
         } else if ($old[$second_field] != "") {
             $color = 'class="d-inline-block mr-1 mb-2" style="font-size:12px;"';
             $col .= "<div $color> (" . $old[$second_field];
@@ -299,7 +299,7 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
                     $col .= '<tr valign="top">';
                     if ($old[$first_field] == 'checkbox' && $old[$sixth_field] != $new[$sixth_field]) {
                         $col .= '<td>' . $val . '</td>';
-                        $col .= '<td>patata'.$label . $old[$first_field] . '</td>';
+                        $col .= '<td>'.$label . $old[$first_field] . '</td>';
                     } else {
                         $col .= "<td>" . $val . "</td>";
                         $col .= "<td>" . $label . "</td>";
@@ -410,19 +410,27 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
    }
 
 
-    function tableColumns($status, $first, $second, $third)
+    function tableColumns($status, $first, $second, $third, $option="")
     {
         $icon = "fa-pencil-alt";
+        $iconPDF = "#";
         if($status == "changed"){
             $icon = "fa-pencil-alt";
+            $iconPDF = "#";
         }else if($status == "added"){
             $icon = "fa-plus";
+            $iconPDF = "+";
         }else if($status == "removed"){
             $icon = "fa-minus";
+            $iconPDF = "-";
         }
 
+        $legend = '<a href="#" data-toggle="tooltip" title="'.$status.'" data-placement="top" class="custom-tooltip" style="vertical-align: -2px;"><span class="label '.$status.'" title="'.$status.'"><i class="fas '.$icon.'" aria-hidden="true"></i></span></a>';
+        if($option == "pdf"){
+            $legend = '<span class="label '.$status.' labeltext">'.$iconPDF.'</span>';
+        }
         $table = "";
-        $table .= '<td style="background-color: #fff;"><a href="#" data-toggle="tooltip" title="'.$status.'" data-placement="top" class="custom-tooltip" style="vertical-align: -2px;"><span class="label '.$status.'" title="'.$status.'"><i class="fas '.$icon.'" aria-hidden="true"></i></span></a></td>';
+        $table .= '<td style="background-color: #fff;">'.$legend.'</td>';
         $table .= "<td>" . $first . "</td>";
         $table .= "<td>" . $second . "</td>";
         $table .= "<td>" . $third . "</td>";
@@ -430,11 +438,11 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
         return $table;
     }
 
-    function ColorTable($new, $old){
+    function ColorTable($new, $old, $option=""){
         $table = "";
         $sumOfAll = 0;
         foreach($new as $formNames => $field_names){
-            $table .= "<tr><td colspan='5' style='background-color:#333; color:#fff;'>Instrument: " . ucwords(str_replace('_', ' ', $formNames)) . "</td></tr>";
+            $table .= "<tr><td colspan='4' style='background-color:#333; color:#fff;'>Instrument: " . ucwords(str_replace('_', ' ', $formNames)) . "</td></tr>";
             foreach($field_names as $type => $metaRows){
                 foreach($metaRows as $key => $value){
                     $first_col = "";
@@ -445,13 +453,14 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
                     $oldChoices = $this->parseArray($old_value['select_choices_or_calculations']);
 
                     if ($type === 'changed') {
+                        $table .= "<tr>";
                         $first_col .= $this->main($value, $old_value, 'field_name');
                         $first_col .= $this->secondary($value, $old_value, 'branching_logic', 'Show the field ONLY if:');
                         $second_col .= $this->secondary($value, $old_value, 'section_header', 'Section Header :');
                         $second_col .= $this->main($value, $old_value, 'field_label');
                         $second_col .= $this->secondary($value, $old_value, 'field_note');
                         $third_col .= $this->thirdCol($value, $old_value, 'field_type', 'text_validation_type_or_show_slider_number', 'required_field', 'identifier', 'field_annotation', 'select_choices_or_calculations', 'text_validation_min', 'text_validation_max');
-                        $table .= $this->tableColumns("changed", $first_col, $second_col, $third_col);
+                        $table .= $this->tableColumns("changed", $first_col, $second_col, $third_col,$option);
                     }
 
                     if($type === 'added'){
@@ -459,14 +468,14 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
                          $first_col .= $this->first_col($value);
                          $second_col .= $this->second_col($value);
                          $third_col .= $this->third_col($value);
-                         $table .= $this->tableColumns("added", $first_col, $second_col, $third_col);
+                         $table .= $this->tableColumns("added", $first_col, $second_col, $third_col,$option);
                     }
                     if($type === 'removed'){
                         $table .= "<tr style='background-color:#cb410b; color:#fff;'>";
                         $first_col .= $this->first_col($value);
                         $second_col .= $this->second_col($value);
                         $third_col .= $this->third_col($value);
-                        $table .= $this->tableColumns("removed", $first_col, $second_col, $third_col);
+                        $table .= $this->tableColumns("removed", $first_col, $second_col, $third_col,$option);
 
                     }
 
@@ -475,7 +484,11 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
 
             }
         }
-        print $table;
+        if($option == "pdf"){
+            return $table;
+        }else{
+            print $table;
+        }
 
     }
 
@@ -541,6 +554,7 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
     {
         $old = \REDCap::getDataDictionary(PROJECT_ID, 'array', false);
         $new = $this->dataDictionaryCSVToMetadataArray($path);
+        $this->setProjectSetting('filedata',json_encode($new));
 
         $removed = array_diff_key($old, $new);
         $added = array_diff_key($new, $old);
@@ -576,12 +590,18 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
                     $anyItems = $this->countedItems($added, $changed, $removed);
                     if($anyItems){
                     ?>
-                        <ul class="legend">
-                            <li><a href="#" data-toggle="tooltip" title="changed" data-placement="top" class="custom-tooltip" style="vertical-align: -2px;"><span class="label changed" title="changed"><i class="fas fa-pencil-alt" aria-hidden="true"></i></span></a> Changed</li>
-                            <li><a href="#" data-toggle="tooltip" title="added" data-placement="top" class="custom-tooltip" style="vertical-align: -2px;"><span class="label added" title="added"><i class="fas fa-plus" aria-hidden="true"></i></span></a> Added</li>
-                            <li><a href="#" data-toggle="tooltip" title="removed" data-placement="top" class="custom-tooltip" style="vertical-align: -2px;"><span class="label removed" title="removed"><i class="fas fa-minus" aria-hidden="true"></i></span></a> Removed</li>
-                            <li><a href="#" data-toggle="tooltip" title="old" data-placement="top" class="custom-tooltip" style="vertical-align: -2px;"><span class="label old" title="old"><i class="fas fa-times" aria-hidden="true"></i></span></a> Old Value</li>
-                        </ul>
+                        <div>
+                            <ul class="legend" style="float: left">
+                                <li><a href="#" data-toggle="tooltip" title="changed" data-placement="top" class="custom-tooltip" style="vertical-align: -2px;"><span class="label changed" title="changed"><i class="fas fa-pencil-alt" aria-hidden="true"></i></span></a> Changed</li>
+                                <li><a href="#" data-toggle="tooltip" title="added" data-placement="top" class="custom-tooltip" style="vertical-align: -2px;"><span class="label added" title="added"><i class="fas fa-plus" aria-hidden="true"></i></span></a> Added</li>
+                                <li><a href="#" data-toggle="tooltip" title="removed" data-placement="top" class="custom-tooltip" style="vertical-align: -2px;"><span class="label removed" title="removed"><i class="fas fa-minus" aria-hidden="true"></i></span></a> Removed</li>
+                                <li><a href="#" data-toggle="tooltip" title="old" data-placement="top" class="custom-tooltip" style="vertical-align: -2px;"><span class="label old" title="old"><i class="fas fa-times" aria-hidden="true"></i></span></a> Old Value</li>
+                            </ul>
+                            <form method="POST" action="<?=$this->getUrl('generate_pdf.php')?>" style="display: inline-block; float:right; margin-top:-20px">
+                                <button type="submit" class="btn btn-primary" name="btnPDF" id="btnPDF"><em class="fa fa-file-pdf"></em> PDF</button>
+                                <input type="hidden" name="filenamePDF" id="filenamePDF" value="">
+                            </form>
+                        </div>
                         <div class="table-wrapper-scroll-y custom-scrollbar table-responsive">
                             <table class='table table-bordered table-striped'>
                                 <thead>

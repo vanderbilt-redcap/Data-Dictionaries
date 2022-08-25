@@ -41,13 +41,11 @@ var ajaxLoadTimeout;
       var formData = new FormData();
 
         var files = $('#inputFile')[0].files[0];
-            
 
         formData.append('file', files);
-    
-        $('#inputFile').data('title',files.name).attr('data-title',files.name);        
 
-    
+        $('#inputFile').data('title',files.name).attr('data-title',files.name);
+
          uploadFormData(formData);
   });
  
@@ -68,10 +66,6 @@ var ajaxLoadTimeout;
           setTimeout(function() { 
           $('#uploaded_file').append(data);
           }, 3000);
-
-          // $('#uploaded_file').append(data);
-
-         
         },
         complete: function (form_data) {
           setTimeout(function() { 
