@@ -414,6 +414,7 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
     {
         $icon = "fa-pencil-alt";
         $iconPDF = "#";
+        $color = "";
         if($status == "changed"){
             $icon = "fa-pencil-alt";
             $iconPDF = "#";
@@ -423,6 +424,7 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
         }else if($status == "removed"){
             $icon = "fa-minus";
             $iconPDF = "-";
+            $color = "style='color:#fff'";
         }
 
         $legend = '<a href="#" data-toggle="tooltip" title="'.$status.'" data-placement="top" class="custom-tooltip" style="vertical-align: -2px;"><span class="label '.$status.'" title="'.$status.'"><i class="fas '.$icon.'" aria-hidden="true"></i></span></a>';
@@ -431,9 +433,9 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
         }
         $table = "";
         $table .= '<td style="background-color: #fff;">'.$legend.'</td>';
-        $table .= "<td>" . $first . "</td>";
-        $table .= "<td>" . $second . "</td>";
-        $table .= "<td>" . $third . "</td>";
+        $table .= "<td ".$color.">" . $first . "</td>";
+        $table .= "<td ".$color.">" . $second . "</td>";
+        $table .= "<td ".$color.">" . $third . "</td>";
 
         return $table;
     }
