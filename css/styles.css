@@ -65,6 +65,9 @@ display: block;
 .added{background-color:#5d9451;}
 .removed{background-color:#cb410b;}
 .old {background-color: #6c757d;}
+#bg-warning div{
+    background-color:#ffc107 !important;
+}
 
 .numberOfRows{
     display: flex;

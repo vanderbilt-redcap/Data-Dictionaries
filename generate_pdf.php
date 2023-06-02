@@ -18,7 +18,18 @@ foreach ($possiblyChanged as $key => $value) {
         $hasValueChanged = false;
         foreach ($value as $fieldType => $dataValue) {
             if (trim($dataValue) != trim($old[$key][$fieldType])) {
-                $hasValueChanged = true;
+                //check if they have enetered the choices with a space between the '|' separator
+                if($fieldType == "select_choices_or_calculations"){
+                    $choicesOld = $module->parseArray($old[$key][$fieldType]);
+                    $choices = $module->parseArray($value[$fieldType]);
+                    $possiblyChangedChoicesValues = array_diff($choices, $choicesOld);
+                    $possiblyChangedChoicesKey = array_diff_key($choices, $choicesOld);
+                    if(!empty($possiblyChangedChoicesValues) && !empty($possiblyChangedChoicesKey)){
+                        $hasValueChanged = true;
+                    }
+                }else{
+                    $hasValueChanged = true;
+                }
             }
         }
         if($hasValueChanged){
@@ -124,6 +135,10 @@ th {
 .bg-warning {
     background-color: #ffc107 !important;
 }
+#bg-warning div{
+    background-color:#ffc107 !important;
+}
+
 </style>';
 
 $APP_PATH_MODULE = APP_PATH_WEBROOT_FULL."modules/".substr(__DIR__,strlen(dirname(__DIR__))+1);
@@ -170,26 +185,6 @@ $storedName = md5($reportHash);
 $filePath = EDOC_PATH.$storedName;
 
 #OPTIONS
-//$options = new \Dompdf\Options();
-////$options->setChroot($APP_PATH_MODULE.'/icons/');
-////$options->setIsRemoteEnabled(true);
-////$dompdf->setOptions($options);
-//$options->set('chroot',$APP_PATH_MODULE.'/icons/');
-//$options->set('setIsRemoteEnabled',true);
-//
-//#DOMPDF
-//$dompdf = new \Dompdf\Dompdf($options);
-//$dompdf->setPaper('A4', 'portrait');
-//$dompdf->loadHtml($html_pdf);
-//#to enable images from url
-////$dompdf->output(['isRemoteEnabled' => true]);
-//ob_start();
-//$dompdf->render();
-////#Download option
-//$dompdf->stream($filenamePdf);
-//$filesize = file_put_contents(EDOC_PATH.$storedName, ob_get_contents());
-
-
 $options = new \Dompdf\Options();
 $options->setChroot($APP_PATH_MODULE.'/icons/'); // this is a temporary file
 $options->setIsRemoteEnabled(true);

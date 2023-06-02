@@ -74,7 +74,7 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
         if ($value[$field_name] !== $old_value[$field_name]) {
             $color = "class='mb-2 bg-warning';";
 
-            $col .= "<div $color>" . $value[$field_name] . "</div><div class='text-muted' style=' text-decoration: line-through;'>" . $old_value[$field_name] . "</div>";
+            $col .= "<div $color id='bg-warning'>" . $value[$field_name] . "</div><div class='text-muted' style=' text-decoration: line-through;'>" . $old_value[$field_name] . "</div>";
         } else {
             $col .= "<div class='mb-2'>" . $value[$field_name] . "</div>";
         }
@@ -117,6 +117,7 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
 
         $choices = $this->parseArray($new[$sixth_field]);
         $oldChoices = $this->parseArray($old[$sixth_field]);
+
         if ($new[$first_field] == 'select') $new[$first_field] = 'dropdown';
         elseif ($new[$first_field] == 'textarea') $new[$first_field] = 'notes';
 
@@ -257,7 +258,6 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
                 foreach ($choices as $val => $label) {
                     $col .= '<tr valign="top">';
                     $oldValue = $oldChoices[$val];
-
                     if($first_field == 'checkbox'){
                         $col .= '<td>' . $val . '</td>';
                         $col .= '<td>' . $new[$first_field] . '</td>';
@@ -568,7 +568,18 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
                 $hasValueChanged = false;
                 foreach ($value as $fieldType => $dataValue) {
                     if (trim($dataValue) != trim($old[$key][$fieldType])) {
-                        $hasValueChanged = true;
+                        //check if they have enetered the choices with a space between the '|' separator
+                        if($fieldType == "select_choices_or_calculations"){
+                            $choicesOld = $this->parseArray($old[$key][$fieldType]);
+                            $choices = $this->parseArray($value[$fieldType]);
+                            $possiblyChangedChoicesValues = array_diff($choices, $choicesOld);
+                            $possiblyChangedChoicesKey = array_diff_key($choices, $choicesOld);
+                           if(!empty($possiblyChangedChoicesValues) && !empty($possiblyChangedChoicesKey)){
+                               $hasValueChanged = true;
+                           }
+                        }else{
+                            $hasValueChanged = true;
+                        }
                     }
                 }
                 if($hasValueChanged){
