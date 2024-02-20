@@ -129,8 +129,10 @@ th {
     font-weight: bold; 
 }
 .changed{background-color:#ffc107;}
-.added{background-color:#5d9451;}
-.removed{background-color:#cb410b;}
+.added, .added td:not(:first-child){background-color:#5d9451 !important;}
+.added td:not(:first-child){color:#fff;}
+.removed,.removed td:not(:first-child){background-color:#cb410b;}
+.removed td:not(:first-child){color:#fff;}
 .old {background-color: #6c757d;}
 .bg-warning {
     background-color: #ffc107 !important;

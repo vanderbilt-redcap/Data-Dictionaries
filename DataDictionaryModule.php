@@ -466,14 +466,14 @@ class DataDictionaryModule extends \ExternalModules\AbstractExternalModule
                     }
 
                     if($type === 'added'){
-                         $table .= "<tr style='background-color:#5d9451; color:#fff;'>";
+                         $table .= "<tr class='added'>";
                          $first_col .= $this->first_col($value);
                          $second_col .= $this->second_col($value);
                          $third_col .= $this->third_col($value);
                          $table .= $this->tableColumns("added", $first_col, $second_col, $third_col,$option);
                     }
                     if($type === 'removed'){
-                        $table .= "<tr style='background-color:#cb410b; color:#fff;'>";
+                        $table .= "<tr class='removed'>";
                         $first_col .= $this->first_col($value);
                         $second_col .= $this->second_col($value);
                         $third_col .= $this->third_col($value);
