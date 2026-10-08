@@ -164,7 +164,7 @@ $html_pdf = "<html>
                             <li><span class="label old labeltext">x</span> <span style="padding-left:22px">Old Value</span></li>
                         </ul>
                      </div>
-                    <table class="table table-bordered table-striped" style="width: 50%">
+                    <table class="table table-bordered table-striped" style="width: 100%">
                         <thead>
                             <th>Status</th>
                             <th>Variable / Field Name</th>
